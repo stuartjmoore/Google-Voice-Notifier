@@ -34,7 +34,7 @@ exports.start = function(auth, topic_arn) {
 }
 
 function fetch(auth, checkURL, pageNum) {
-    console.log("FILE: " + new Date() + " fetch: " + checkURL);
+    console.log("FILE: " + new Date() + " fetch: " + checkURL + pageNum);
     
     var options = {
         host: 'www.google.com',
@@ -73,11 +73,11 @@ function fetch(auth, checkURL, pageNum) {
                 if(!isInbox && (currCounts['inbox'] != lastCounts['inbox'] || currCounts['sms'] != 0)) {
                     delay = 0;
                     page = 1;
-                    url = URL_INBOX + page;
+                    url = URL_INBOX;
                 } else if(isInbox && pagingNeeded) {
                     delay = 0;
                     page += 1;
-                    url = URL_INBOX + page;
+                    url = URL_INBOX;
                 } else if(isInbox && currCounts['sms'] != 0) {
                     /*
                      *  We need to update via the inbox because
@@ -86,7 +86,7 @@ function fetch(auth, checkURL, pageNum) {
                      */
                     delay = 1000;
                     page = 1;
-                    url = URL_INBOX + page;
+                    url = URL_INBOX;
                 } else {
                     delay = 1000;
                     page = '';
@@ -120,9 +120,6 @@ function parseInbox(inbox) {
     var messageList = inbox.messageList;
     var newUnread = [];
     var pagingNeeded = false;
-    
-    // TODO: Has returned and empty messageList recently. Not good.
-    console.log("FILE: messageList: " + JSON.stringify(inbox));
     
     for(var i = 0; i < messageList.length; i++) {
         var message = messageList[i];

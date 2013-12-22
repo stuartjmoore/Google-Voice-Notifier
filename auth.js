@@ -32,7 +32,7 @@ exports.decrypt = function(value, key) {
 }
 
 exports.login = function(username, password, success) {
-    var data = 'service=grandcentral&Email=' + username + '&Passwd=' + password + '&accountType=GOOGLE&source=gcvd';
+    var data = 'service=grandcentral&Email=' + username + '&Passwd=' + password + '&accountType=GOOGLE';
     var options = {
         method: 'POST',
         host: 'www.google.com',
