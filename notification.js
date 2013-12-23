@@ -28,9 +28,32 @@ exports.post = function(message, count) {
     
     var json = {
         'default': 'default',
-        'APNS': JSON.stringify({ 'aps': { 'badge': count, 'alert': text } }),
-        'APNS_SANDBOX': JSON.stringify({ 'aps': { 'badge': count, 'alert': text } }),
-        'GCM': JSON.stringify({ 'data': { 'message': text } })
+        'APNS': JSON.stringify({
+                               'aps': {
+                                   'badge': count,
+                                   'alert': text,
+                                   'content-available': 1
+                               },
+                               'conversation_id': id
+                           }),
+        'APNS_SANDBOX': JSON.stringify({
+                                       'aps': {
+                                           'badge': count,
+                                           'alert': text,
+                                           'content-available': 1
+                                       },
+                                       'conversation_id': id
+                                   }),
+        'GCM': JSON.stringify({
+                              //'restricted_package_name': 'com.',
+                              'data': {
+                                  'message': text,
+                                  'conversation_id': id
+                              },
+                              'collapse_key': id,
+                              'delay_while_idle': false,
+                              'time_to_live': 86400 // 24 hours
+                          })
     };
     
     var params = {
@@ -60,9 +83,29 @@ exports.remove = function(message, count) {
     
     var json = {
         'default': '',
-        'APNS': JSON.stringify({ 'aps': { 'badge': count } }),
-        'APNS_SANDBOX': JSON.stringify({ 'aps': { 'badge': count } }),
-        'GCM': JSON.stringify({ 'data': {} })
+        'APNS': JSON.stringify({
+                               'aps': {
+                                   'badge': count,
+                                   'content-available': 1
+                               },
+                               'conversation_id': id
+                           }),
+        'APNS_SANDBOX': JSON.stringify({
+                                       'aps': {
+                                           'badge': count,
+                                           'content-available': 1
+                                       },
+                                       'conversation_id': id
+                                   }),
+        'GCM': JSON.stringify({
+                              //'restricted_package_name': 'com.',
+                              'data': {
+                                  'conversation_id': id
+                              },
+                              'collapse_key': id,
+                              'delay_while_idle': false,
+                              'time_to_live': 86400 // 24 hours
+                          })
     };
     
     var params = {
