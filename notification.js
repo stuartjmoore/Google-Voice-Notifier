@@ -48,7 +48,10 @@ exports.post = function(message, count) {
                               //'restricted_package_name': 'com.',
                               'data': {
                                   'message': text,
-                                  'conversation_id': id
+                                  'name': "Person Name",
+                                  'type': "SMS|Missed Call|Voicemail",
+                                  'conversation_id': id,
+                                  'count': count
                               },
                               'collapse_key': id,
                               'delay_while_idle': false,
@@ -100,7 +103,8 @@ exports.remove = function(message, count) {
         'GCM': JSON.stringify({
                               //'restricted_package_name': 'com.',
                               'data': {
-                                  'conversation_id': id
+                                  'conversation_id': id,
+                                  'count': count
                               },
                               'collapse_key': id,
                               'delay_while_idle': false,
