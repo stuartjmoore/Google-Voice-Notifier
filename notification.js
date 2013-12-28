@@ -6,6 +6,11 @@
  *  accessKeyId, secretAccessKey, & region.
  */
 
+var MISSED_CALL = 0;
+var VOICEMAIL = 2;
+var SMS_RECEIVED = 10;
+var SMS_SENT = 11;
+
 var aws = require('aws-sdk');
 var sns;
 var topicArn = '';
@@ -20,18 +25,28 @@ exports.init = function(topic_arn) {
    Applies to single SMS messages, missed calls, and voicemails.
  */
 exports.post = function(message, count) {
-    var text = message.messageText ? message.messageText : message.message;
     var id = message.conversationId ? message.conversationId : message.id;
+    var name = message.fromName;
+    var firstName = name.substr(0, name.indexOf(" "));
+    var text = message.messageText ? message.messageText : message.message;
+    var startTime = message.startTime;
+    var type = message.type;
     
-    console.log("Sending: " + id);
-    console.log("Send notification: " + text);
+    var displayText;
+    
+    if(type == MISSED_CALL)
+        displayText =  firstName + ", Missed Call.";
+    else if(type == VOICEMAIL)
+        displayText = firstName + ", Voicemail: " + text;
+    else if(type == SMS_RECEIVED)
+        displayText = firstName + ": " + text;
     
     var json = {
         'default': 'default',
         'APNS': JSON.stringify({
                                'aps': {
                                    'badge': count,
-                                   'alert': text,
+                                   'alert': displayText,
                                    'content-available': 1
                                },
                                'conversation_id': id
@@ -39,19 +54,19 @@ exports.post = function(message, count) {
         'APNS_SANDBOX': JSON.stringify({
                                        'aps': {
                                            'badge': count,
-                                           'alert': text,
+                                           'alert': displayText,
                                            'content-available': 1
                                        },
                                        'conversation_id': id
                                    }),
         'GCM': JSON.stringify({
-                              //'restricted_package_name': 'com.',
                               'data': {
                                   'message': text,
-                                  'name': "Person Name",
-                                  'type': "SMS|Missed Call|Voicemail",
+                                  'name': name,
+                                  'type': type.toString(),
+                                  'date': startTime,
                                   'conversation_id': id,
-                                  'count': count
+                                  'count': count.toString()
                               },
                               'collapse_key': id,
                               'delay_while_idle': false,
@@ -65,7 +80,7 @@ exports.post = function(message, count) {
         Message: JSON.stringify(json)
     };
     
-    console.log("json: " + JSON.stringify(json));
+    console.log("Send notification: " + JSON.stringify(json) + "\n");
     
     sns.publish(params, function(err, data) {
         if(err) {
@@ -101,10 +116,9 @@ exports.remove = function(message, count) {
                                        'conversation_id': id
                                    }),
         'GCM': JSON.stringify({
-                              //'restricted_package_name': 'com.',
                               'data': {
                                   'conversation_id': id,
-                                  'count': count
+                                  'count': count.toString()
                               },
                               'collapse_key': id,
                               'delay_while_idle': false,
@@ -117,8 +131,6 @@ exports.remove = function(message, count) {
         MessageStructure: "json",
         Message: JSON.stringify(json)
     };
-    
-    console.log("json: " + JSON.stringify(json));
     
     sns.publish(params, function(err, data) {
         if(err) {

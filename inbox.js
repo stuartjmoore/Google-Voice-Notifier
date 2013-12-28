@@ -139,6 +139,10 @@ function parseInbox(inbox) {
                     if(newUnread.indexOf(message.id) == -1 && lastUnread.indexOf(message.id) == -1)
                         newUnread.push(message.id);
                     
+                    var phoneNumber = sms.phoneNumber;
+                    var name = inbox['contacts']['contactPhoneMap'][phoneNumber]['name'];
+                    sms.fromName = name;
+                    
                     lastStartTime.SMS[message.id] = startTime;
                     notification.post(sms, inbox['unreadCounts']['inbox']);
                 } else
@@ -148,7 +152,7 @@ function parseInbox(inbox) {
             if(newUnread.indexOf(message.id) == -1 && lastUnread.indexOf(message.id) == -1)
                 newUnread.push(message.id);
             
-            notification.post(message, inbox['unreadCounts']['inbox']);
+            notification.post(message.children[0], inbox['unreadCounts']['inbox']);
         }
         
         if(inbox.resultsPerPage == (i+1) && (!lastStartTime.inbox || lastStartTime.inbox < startTime)) {
