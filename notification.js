@@ -140,3 +140,45 @@ exports.remove = function(message, count) {
         }
     });
 }
+
+/*
+ Just in case the server has an exception.
+ */
+exports.error = function(error) {
+    
+    var apns_json = JSON.stringify({
+        'aps': {
+            'alert': "Error:" + error.message
+        }
+    });
+    
+    var gcm_json = JSON.stringify({
+        'data': {
+            'message': "Error:" + error.message
+        },
+        'collapse_key': '-1',
+        'delay_while_idle': false,
+        'time_to_live': 86400 // 24 hours
+    });
+    
+    var json = {
+        'default': "Error:" + error.message,
+        'APNS': apns_json,
+        'APNS_SANDBOX': apns_json,
+        'GCM': gcm_json
+    };
+    
+    var params = {
+        TopicArn: topicArn,
+        MessageStructure: "json",
+        Message: JSON.stringify(json)
+    };
+    
+    sns.publish(params, function(err, data) {
+        if(err) {
+            console.log("Error sending a message: ", err);
+        } else {
+            console.log("Sent message");
+        }
+    });
+}

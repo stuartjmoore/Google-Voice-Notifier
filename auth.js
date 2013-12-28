@@ -31,7 +31,7 @@ exports.decrypt = function(value, key) {
     return password;
 }
 
-exports.login = function(username, password, success) {
+exports.login = function(username, password, success, failure) {
     var data = 'service=grandcentral&Email=' + username + '&Passwd=' + password + '&accountType=GOOGLE';
     var options = {
         method: 'POST',
@@ -50,6 +50,7 @@ exports.login = function(username, password, success) {
         if(response.statusCode != 200) {
             console.error("FILE: Auth status error");
             auth = '';
+            failure({'message': "Status error"});
             return;
         }
         
@@ -63,17 +64,20 @@ exports.login = function(username, password, success) {
             if(index == -1 || auth == 'Error=BadAuthentication') {
                 console.error("FILE: Bad Authentication");
                 auth = '';
+                failure({'message': "Authentication error"});
                 return;
             }
             
             console.log("FILE: Logged in!");
             success(auth, creds.topic_arn);
+            return;
         })
     });
     
     request.on('error', function(error) {
         console.error("FILE: problem with request: " + error.message);
         auth = '';
+        failure({'message': "Request error"});
         return;
     });
     

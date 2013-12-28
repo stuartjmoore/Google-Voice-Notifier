@@ -26,6 +26,9 @@ http.createServer(function(request, response) {
             response.write(JSON.stringify({ 'success' : true }));
             response.end();
             inbox.start(auth, topic_arn);
+        }, function(error) {
+            response.write(JSON.stringify({ 'success' : false, 'error' : error.message }));
+            response.end();
         });
     }
     // else if(url.parse(request.url).pathname == '/count')

@@ -30,7 +30,7 @@ var lastCounts = { 'inbox': 0, 'sms': 0, 'missed': 0, 'voicemail': 0 };
 
 exports.start = function(auth, topic_arn) {
     notification.init(topic_arn);
-    fetch(auth, URL_UNREAD);
+    fetch(auth, URL_UNREAD, '');
 }
 
 function fetch(auth, checkURL, pageNum) {
@@ -49,6 +49,7 @@ function fetch(auth, checkURL, pageNum) {
     var request = https.request(options, function(response) {
         if(response.statusCode != 200) {
             console.error("FILE: Unread status error");
+            notification.error({'message': 'fetch() status error.'});
             return;
         }
 
@@ -101,6 +102,7 @@ function fetch(auth, checkURL, pageNum) {
                 setTimeout(fetch, delay, auth, url, page);
             } catch(exception) {
                 console.error("FILE: Parsing error:", exception);
+                notification.error({'message': 'fetch() parsing error.'});
                 return;
             }
         })
@@ -108,6 +110,7 @@ function fetch(auth, checkURL, pageNum) {
     
     request.on('error', function(error) {
         console.error("FILE: problem with request: " + error.message);
+        notification.error({'message': 'fetch() request error.'});
         return;
     });
     
