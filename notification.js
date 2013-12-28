@@ -41,37 +41,34 @@ exports.post = function(message, count) {
     else if(type == SMS_RECEIVED)
         displayText = firstName + ": " + text;
     
+    var apns_json = JSON.stringify({
+        'aps': {
+            'badge': count,
+            'alert': displayText,
+            'content-available': 1
+        },
+        'conversation_id': id
+    });
+    
+    var gcm_json = JSON.stringify({
+        'data': {
+            'message': text,
+            'name': name,
+            'type': type.toString(),
+            'date': startTime,
+            'conversation_id': id,
+            'count': count.toString()
+        },
+        'collapse_key': id,
+        'delay_while_idle': false,
+        'time_to_live': 86400 // 24 hours
+    });
+    
     var json = {
         'default': 'default',
-        'APNS': JSON.stringify({
-                               'aps': {
-                                   'badge': count,
-                                   'alert': displayText,
-                                   'content-available': 1
-                               },
-                               'conversation_id': id
-                           }),
-        'APNS_SANDBOX': JSON.stringify({
-                                       'aps': {
-                                           'badge': count,
-                                           'alert': displayText,
-                                           'content-available': 1
-                                       },
-                                       'conversation_id': id
-                                   }),
-        'GCM': JSON.stringify({
-                              'data': {
-                                  'message': text,
-                                  'name': name,
-                                  'type': type.toString(),
-                                  'date': startTime,
-                                  'conversation_id': id,
-                                  'count': count.toString()
-                              },
-                              'collapse_key': id,
-                              'delay_while_idle': false,
-                              'time_to_live': 86400 // 24 hours
-                          })
+        'APNS': apns_json,
+        'APNS_SANDBOX': apns_json,
+        'GCM': gcm_json
     };
     
     var params = {
@@ -99,31 +96,29 @@ exports.remove = function(message, count) {
     
     console.log("Remove notification: " + id);
     
+    var apns_json = JSON.stringify({
+        'aps': {
+            'badge': count,
+            'content-available': 1
+        },
+        'conversation_id': id
+    });
+    
+    var gcm_json = JSON.stringify({
+        'data': {
+            'conversation_id': id,
+            'count': count.toString()
+        },
+        'collapse_key': id,
+        'delay_while_idle': false,
+        'time_to_live': 86400 // 24 hours
+    });
+    
     var json = {
         'default': '',
-        'APNS': JSON.stringify({
-                               'aps': {
-                                   'badge': count,
-                                   'content-available': 1
-                               },
-                               'conversation_id': id
-                           }),
-        'APNS_SANDBOX': JSON.stringify({
-                                       'aps': {
-                                           'badge': count,
-                                           'content-available': 1
-                                       },
-                                       'conversation_id': id
-                                   }),
-        'GCM': JSON.stringify({
-                              'data': {
-                                  'conversation_id': id,
-                                  'count': count.toString()
-                              },
-                              'collapse_key': id,
-                              'delay_while_idle': false,
-                              'time_to_live': 86400 // 24 hours
-                          })
+        'APNS': apns_json,
+        'APNS_SANDBOX': apns_json,
+        'GCM': gcm_json
     };
     
     var params = {
