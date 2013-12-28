@@ -28,6 +28,8 @@ http.createServer(function(request, response) {
             inbox.start(auth, topic_arn);
         });
     }
+    // else if(url.parse(request.url).pathname == '/count')
+        // return inbox count
     else
     {
         response.write(JSON.stringify({ 'success' : false, 'error' : "Invalid path" }));
