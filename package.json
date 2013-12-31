@@ -1,0 +1,35 @@
+{
+  "name": "Google-Voice-Notifier",
+  "version": "1.0.0",
+  "description": "Google Voice Notifier",
+  "keywords": [
+    "OpenShift",
+    "Node.js",
+    "application",
+    "openshift"
+  ],
+  "author": {
+    "name": "Stuart Moore",
+    "email": "ramr@example.org",
+    "url":  "http://www.stuartjmoore.com/"
+  },
+  "homepage": "http://www.stuartjmoore.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://gitub.com/stuartjmoore/Google-Voice-Notifier"
+  },
+
+  "engines": {
+    "node": ">= 0.6.0",
+    "npm": ">= 1.0.0"
+  },
+
+  "dependencies": {
+      "aws-sdk": "2.0.0-rc3"
+  },
+  "devDependencies": {},
+  "bundleDependencies": [],
+
+  "private": true,
+  "main": "main.js"
+}
