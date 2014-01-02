@@ -2,4 +2,3 @@ apps/
 aws.json
 creds.json
 *.xcworkspace
-node_modules
