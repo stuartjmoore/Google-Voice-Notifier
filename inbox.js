@@ -48,7 +48,7 @@ function fetch(auth, checkURL, pageNum) {
             
     var request = https.request(options, function(response) {
         if(response.statusCode != 200) {
-            console.error("FILE: Unread status error");
+            console.error("FILE: Unread status error: " + response.statusCode);
             notification.error({'message': 'fetch() status error.'});
             return;
         }
@@ -85,11 +85,11 @@ function fetch(auth, checkURL, pageNum) {
                      *  URL_UNREAD doesn't give us counts _inside_
                      *  of SMS conversations.
                      */
-                    delay = 1000;
+                    delay = 1337;
                     page = 1;
                     url = URL_INBOX;
                 } else {
-                    delay = 1000;
+                    delay = 1234;
                     page = '';
                     url = URL_UNREAD;
                 }
