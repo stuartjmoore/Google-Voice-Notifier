@@ -1,4 +1,3 @@
 apps/
-aws.json
-creds.json
+data/
 *.xcworkspace

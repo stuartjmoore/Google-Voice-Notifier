@@ -16,7 +16,8 @@ var sns;
 var topicArn = '';
 
 exports.init = function(topic_arn) {
-    aws.config.loadFromPath('./aws.json');
+    var DATA_FOLDER = process.env.OPENSHIFT_DATA_DIR || './data/';
+    aws.config.loadFromPath(DATA_FOLDER + 'aws.json');
     sns = new aws.SNS();
     topicArn = topic_arn;
 }

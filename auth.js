@@ -8,7 +8,8 @@ var crypto = require('crypto');
  *  It will need values for crypted_username, crypted_password,
  *  and Amazon SNS's topic_arn.
  */
-var creds = require('./creds.json');
+var DATA_FOLDER = process.env.OPENSHIFT_DATA_DIR || './data/';
+var creds = require(DATA_FOLDER + 'creds.json');
 
 var auth = '';
 var rnr_se = '';
