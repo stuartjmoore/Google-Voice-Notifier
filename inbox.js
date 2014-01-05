@@ -49,7 +49,7 @@ function fetch(auth, checkURL, pageNum) {
     var request = https.request(options, function(response) {
         if(response.statusCode != 200) {
             console.error("FILE: Unread status error: " + response.statusCode);
-            notification.error({'message': 'fetch() status error.'});
+            notification.error({'message': 'fetch() status error: ' + response.statusCode});
             return;
         }
 
@@ -102,6 +102,7 @@ function fetch(auth, checkURL, pageNum) {
                 setTimeout(fetch, delay, auth, url, page);
             } catch(exception) {
                 console.error("FILE: Parsing error:", exception);
+                console.log("FILE: data: " + data);
                 notification.error({'message': 'fetch() parsing error.'});
                 return;
             }
