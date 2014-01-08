@@ -62,6 +62,13 @@ function fetch(auth, checkURL, pageNum) {
         response.on('data', function(chunk) { data += chunk; });
 
         response.on('end', function() {
+            if(!data || data == '') {
+                console.error("FILE: Empty response");
+                notification.error({'message': 'fetch() Empty response.'});
+                setTimeout(fetch, 5286, auth, URL_UNREAD, '');
+                return
+            }
+                    
             try {
                 var jsonData = JSON.parse(data);
                 var currCounts = jsonData['unreadCounts'];
