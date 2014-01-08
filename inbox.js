@@ -47,7 +47,12 @@ function fetch(auth, checkURL, pageNum) {
     };
             
     var request = https.request(options, function(response) {
-        if(response.statusCode != 200) {
+        if(response.statusCode == 500) {
+            console.error("FILE: Unread status error: " + response.statusCode);
+            notification.error({'message': 'fetch() status error: ' + response.statusCode});
+            setTimeout(fetch, 5286, auth, URL_UNREAD, '');
+            return
+        } else if(response.statusCode != 200) {
             console.error("FILE: Unread status error: " + response.statusCode);
             notification.error({'message': 'fetch() status error: ' + response.statusCode});
             return;
