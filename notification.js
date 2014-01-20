@@ -45,8 +45,7 @@ exports.post = function(message, count) {
     var apns_json = JSON.stringify({
         'aps': {
             'badge': count,
-            'alert': displayText,
-            'content-available': 1
+            'alert': displayText
         },
         'conversation_id': id
     });
@@ -99,8 +98,7 @@ exports.remove = function(message, count) {
     
     var apns_json = JSON.stringify({
         'aps': {
-            'badge': count,
-            'content-available': 1
+            'badge': count
         },
         'conversation_id': id
     });
@@ -150,7 +148,12 @@ exports.error = function(error) {
     
     var gcm_json = JSON.stringify({
         'data': {
-            'message': "Error:" + error.message
+            'message': "Error:" + error.message,
+            'name': "System",
+            'type': "-1",
+            'date': Date.now(),
+            'conversation_id': "-1",
+            'count': 0
         },
         'collapse_key': '-1',
         'delay_while_idle': false,
