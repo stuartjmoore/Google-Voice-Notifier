@@ -45,7 +45,8 @@ exports.post = function(message, count) {
     var apns_json = JSON.stringify({
         'aps': {
             'badge': count,
-            'alert': displayText
+            'alert': displayText,
+            'content-available': 1
         },
         'conversation_id': id
     });
@@ -98,7 +99,8 @@ exports.remove = function(message, count) {
     
     var apns_json = JSON.stringify({
         'aps': {
-            'badge': count
+            'badge': count,
+            'content-available': 1
         },
         'conversation_id': id
     });
