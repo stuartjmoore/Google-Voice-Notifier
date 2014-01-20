@@ -48,10 +48,8 @@ function fetch(auth, checkURL, pageNum) {
             
     var request = https.request(options, function(response) {
         if(response.statusCode == 500) {
-            console.error("FILE: Unread status error: " + response.statusCode);
-            notification.error({'message': 'fetch() status error: ' + response.statusCode});
             setTimeout(fetch, 5286, auth, URL_UNREAD, '');
-            return
+            return;
         } else if(response.statusCode != 200) {
             console.error("FILE: Unread status error: " + response.statusCode);
             notification.error({'message': 'fetch() status error: ' + response.statusCode});
@@ -63,10 +61,8 @@ function fetch(auth, checkURL, pageNum) {
 
         response.on('end', function() {
             if(!data || data == '') {
-                console.error("FILE: Empty response");
-                notification.error({'message': 'fetch() Empty response.'});
                 setTimeout(fetch, 5286, auth, URL_UNREAD, '');
-                return
+                return;
             }
                     
             try {
