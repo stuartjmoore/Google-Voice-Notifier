@@ -27,7 +27,7 @@ exports.init = function(topic_arn) {
  */
 exports.post = function(message, count) {
     var id = message.conversationId ? message.conversationId : message.id;
-    var name = message.fromName;
+    var name = message.fromName; // TODO: Get phone number if name doesn't exist.
     var firstName = name.substr(0, name.indexOf(" "));
     var text = message.messageText ? message.messageText : message.message;
     var startTime = message.startTime;
